@@ -1,16 +1,15 @@
-@ -0,0 +1,103 @@
-# GK Innovatech!
+# GK Innovatech
     
-**Estructura del documento principal:**
 
-# PRESENTACIÓN (Título/Nombre Proyecto)
+# Gestión de Ventas - GK Innovatech
 
 **Asignatura**: Bases de Datos I (FaCENA-UNNE)
 
 **Integrantes**:
- - Sed vel lectus nec lectus placerat laoreet et sed est.
- - Sed ac justo ac mauris porttitor convallis non sit amet felis.
- - In tincidunt augue sed molestie malesuada.
+ - Acosta, Lopez Gonzalo Nahuel.
+ - Borda, Esteban Rubén.
+ - Garay, Kevin Emiliano.
+ - Mancedo Joaquin.
 
 **Año**: 2024
 
@@ -18,11 +17,24 @@
 
 ### Caso de estudio
 
-Maecenas molestie lacus tincidunt, placerat dolor et, ullamcorper erat. Mauris tortor nisl, ultricies ac scelerisque nec, feugiat in nibh. 
+Análisis y Optimización de la Base de Datos para un Sistema de Gestión de Ventas en GK Innovatech: Mejorando la Eficiencia, Integridad de Datos y Experiencia del Usuario
 
 ### Definición o planteamiento del problema
 
-Pellentesque interdum aliquam magna sit amet rutrum. Nulla aliquam ligula nec quam iaculis dictum. In cursus aliquam cursus. Nullam a sem vel sapien iaculis finibus. Donec aliquam dictum viverra. Etiam ut orci lacus.
+Este proyecto de estudio investiga la base de datos del sistema de gestión de ventas de GK Innovatech, una empresa de artículos electrónicos. El objetivo es identificar y resolver problemas relacionados con la eficiencia operativa, la integridad de los datos y la experiencia del usuario. 
+
+Se busca optimizar la estructura y el rendimiento de la base de datos para garantizar un manejo eficiente de la información de ventas, inventario y clientes, contribuyendo así a una mejor toma de decisiones y satisfacción del cliente.
+
+i. Objetivo General
+    Optimizar la base de datos del sistema de gestión de ventas de GK Innovatech para mejorar la eficiencia, la integridad de los datos.
+ii. Objetivos Específicos
+    Identificar los problemas actuales de la base de datos en el sistema de gestión de ventas, incluyendo problemas en el rendimiento, inconsistencias en la integridad de los datos. 
+        Este objetivo se centra en diagnosticar las áreas problemáticas para establecer un punto de partida claro.
+    Analizar y proponer mejoras en la estructura de la base de datos que optimicen la velocidad de consulta y la eficiencia en la gestión de datos.
+        Aquí se busca encontrar soluciones técnicas que mejoren el rendimiento del sistema.
+    Implementar técnicas de normalización y mejores prácticas de diseño de bases de datos para asegurar la integridad y consistencia de los datos de ventas e inventario.
+        Este objetivo se enfoca en garantizar la calidad y fiabilidad de los datos.
+
 
 ## CAPITULO II: MARCO CONCEPTUAL O REFERENCIAL
 
@@ -101,3 +113,4 @@ Nunc sollicitudin purus quis ante sodales luctus. Proin a scelerisque libero, vi
  3. List item
  4. List item
  5. List item
+
