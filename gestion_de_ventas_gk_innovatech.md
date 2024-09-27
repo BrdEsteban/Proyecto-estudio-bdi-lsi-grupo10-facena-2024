@@ -17,12 +17,12 @@
 
 ### Caso de estudio
 
-####1.1 -	Tema
+#### 1.1 -	Tema
 
 Implementación, Análisis y Optimización de la Base de Datos para un Sistema de Gestión de Ventas de Productos Electrónicos en GK Innovatech: Mejorando la Eficiencia e Integridad de Datos.
 
 
-####1.2 - Alcance
+#### 1.2 - Alcance
 En este proyecto de estudio se trabajará exclusivamente con el sistema de las ventas y el control del stock, quedará exento de esto las compras de productos, los permisos de los usuarios siendo estos los vendedores  y la modificación o eliminación de los proveedores
 
 ### Definición o planteamiento del problema
