@@ -6,8 +6,6 @@ Este espacio propone presentar la información para organizar el desarrollo del 
 
 Este espacio propone presentar la información para organizar el desarrollo del Proyecto de Estudio de la asignatura Bases de Datos I (FaCENA - UNNE)
 
-Este borrador fue elaborado usando https://stackedit.io/app#
-
 **Estructura inicial del proyecto en el repositorio**
 
     proyecto_estudio
@@ -19,6 +17,6 @@ Este borrador fue elaborado usando https://stackedit.io/app#
 		  tema_nombre.md (descripción completa del procedimiento para implementar el tema técnico de estudio)
 	---->tema_2
 	----> ...
-    ->nombre_proyecto.md (documento principal estructurado por capítulos)
+    ->gestion_de_ventas_gk_innovatech.md (documento principal estructurado por capítulos)
     
 **Estructura del documento principal:**
