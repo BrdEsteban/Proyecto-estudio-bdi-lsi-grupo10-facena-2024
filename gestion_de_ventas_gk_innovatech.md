@@ -31,15 +31,26 @@ Este proyecto de estudio investiga la base de datos del sistema de gestión de v
 
 Se busca optimizar la estructura y el rendimiento de la base de datos para garantizar un manejo eficiente de la información de ventas, inventario y clientes, contribuyendo así a una mejor toma de decisiones y satisfacción del cliente.
 
-i. Objetivo General
-    Optimizar la base de datos del sistema de gestión de ventas de GK Innovatech para mejorar la eficiencia, la integridad de los datos.
-ii. Objetivos Específicos
-    Identificar los problemas actuales de la base de datos en el sistema de gestión de ventas, incluyendo problemas en el rendimiento, inconsistencias en la integridad de los datos. 
-        Este objetivo se centra en diagnosticar las áreas problemáticas para establecer un punto de partida claro.
-    Analizar y proponer mejoras en la estructura de la base de datos que optimicen la velocidad de consulta y la eficiencia en la gestión de datos.
-        Aquí se busca encontrar soluciones técnicas que mejoren el rendimiento del sistema.
-    Implementar técnicas de normalización y mejores prácticas de diseño de bases de datos para asegurar la integridad y consistencia de los datos de ventas e inventario.
-        Este objetivo se enfoca en garantizar la calidad y fiabilidad de los datos.
+# i. Objetivo General
+
+Entendemos que la implementación de una base de datos que realice tanto el control de stock, como las ventas de forma automática, reducirá el error humano en la carga de planillas que ya no será necesaria.
+
+- Crear y optimizar la base de datos del sistema de gestión de ventas y productos de GK Innovatech para mejorar la eficiencia y la integridad de los datos.
+- La base de datos deberá permitir auditar los registros de ventas y altas de productos. Esto a través del manejo de vistas.
+
+# ii. Objetivos Específicos
+
+1. **Identificar los posibles problemas al crear la base de datos en el sistema de gestión de ventas**, incluyendo problemas en el rendimiento, inconsistencias en la integridad de los datos.
+    - Este objetivo se centra en diagnosticar las áreas problemáticas para establecer un punto de partida claro.
+
+2. **Analizar y proponer mejoras en la estructura del negocio** de manera que el énfasis esté orientado a la creación de una base de datos consistente.
+    - Aquí se busca encontrar soluciones técnicas que mejoren el rendimiento del sistema.
+
+3. **Implementar técnicas de normalización y mejores prácticas de diseño de bases de datos** para asegurar la integridad y consistencia de los datos de ventas e inventario.
+    - Este objetivo se enfoca en garantizar la calidad y fiabilidad de los datos.
+
+4. **Identificar e implementar las vistas necesarias** para la correcta auditoría de los datos necesarios de las ventas y productos.
+
 
 
 ## CAPITULO II: MARCO CONCEPTUAL O REFERENCIAL
