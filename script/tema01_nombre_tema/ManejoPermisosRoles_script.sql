@@ -14,7 +14,7 @@ WITH PASSWORD = 'Password111',  -- Establece la contraseña para el inicio de se
 CHECK_EXPIRATION = OFF,  -- Desactiva la expiración de contraseña
 CHECK_POLICY = OFF;      -- Desactiva la política de complejidad de contraseña
 
--- Creación del usuario en la base de datos (se asume que estás en la base de datos correcta)
+-- Creación del usuario en la base de datos 
 USE [GK_Innovatech];  -- Selecciona la base de datos correcta
 CREATE USER Garay FOR LOGIN [AdminUser];  -- Crea un usuario llamado Garay asociado al inicio de sesión AdminUser
 
@@ -54,6 +54,16 @@ GRANT SELECT ON Venta TO Acosta;        -- Permite al usuario Acosta realizar SE
 GRANT SELECT ON Productos TO Acosta;    -- Permite al usuario Acosta realizar SELECT en la tabla Productos
 GRANT SELECT ON Categorias TO Acosta;    -- Permite al usuario Acosta realizar SELECT en la tabla Categorias
 
+-- Crea un rol de solo lectura
+CREATE ROLE ReadOnlyRole;
+GRANT SELECT ON Productos TO ReadOnlyRole;
+GRANT SELECT ON Venta TO ReadOnlyRole;
+GRANT SELECT ON Productos TO ReadOnlyRole;
+GRANT SELECT ON Detalle_Venta TO ReadOnlyRole;
+
+EXEC sp_addrolemember 'ReadOnlyRole', 'Acosta';
+
+
 ----------------------------------------
 -- Creación de usuario de la base de datos, usuario público
 USE GK_Innovatech;  -- Selecciona la base de datos correcta
@@ -75,3 +85,64 @@ GRANT DELETE ON Proveedor TO Mancedo;  -- Permite al usuario Mancedo realizar DE
 DENY UPDATE TO Mancedo;  -- Niega el permiso de UPDATE al usuario Mancedo, evitando modificaciones en las tablas
 
 GO  -- Finaliza el lote de comandos SQL
+
+
+--Pruebas usuario Garay
+CREATE TABLE TestAdmin (ID INT);
+DROP TABLE TestAdmin;
+--Deberia permitir agregar y eliminar tablas
+
+--Inserciones usuario Borda
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('1596','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1);
+SELECT * FROM Productos;--Deberia permitir
+
+--Permisos de lectura con usuario Acosta
+SELECT * FROM Productos; -- Debe permitir la consulta
+
+--Con usuario que no tenga el rol
+SELECT * FROM Productos; -- Debe denegar el acceso
+
+--Prueba de insercion Acosta
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('1234','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1); --Debe de fallar
+
+
+--Pruebas con el usuario Mancedo
+
+-- Ejemplo de SELECT
+SELECT * FROM Venta;
+
+-- Ejemplo de INSERT
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);
+
+-- Ejemplo de DELETE
+DELETE FROM Proveedor WHERE ID_Proveedor = 1;
+
+-- Ejemplo de ejecución de procedimiento almacenado
+   EXEC [altaUsuario]       @Dni = 25406089,
+    @Nombre  = 'Pepe',
+    @Apellido  = 'Martinez',
+    @Correo  = 'p2d@correo.com',
+    @Clave  = 'password456',
+    @Estado = 1,
+    @Rol = 3;
+
+-- Ejemplo de UPDATE (debería fallar)
+UPDATE Productos SET Precio_Venta = 30.50 WHERE Nombre_Producto = 'Producto de prueba';
+
+
+	
+--**Verificar el comportamiento de ambos usuarios**:
+   -- Con el usuario con rol de solo lectura (`User1`), intenta leer el contenido de la tabla:
+
+     SELECT * FROM Productos;
+
+    -- Resultado esperado: acceso permitido.
+   
+   -- Con el usuario sin permisos de lectura (`User2`), intenta hacer lo mismo:
+
+     SELECT * FROM Productos;
+ 
+    -- Resultado esperado: acceso denegado.
