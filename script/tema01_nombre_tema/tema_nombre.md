@@ -5,8 +5,8 @@
 **Comisión:** 2  
 **Integrantes:**  
 - Garay, Kevin Emiliano  
-- Borda, Esteban Sebastian  
-- Acosta, Gonzalo Nahuel  
+- Borda, Esteban Rubén
+- Acosta López, Gonzalo Nahuel
 - Mancedo, Joaquin  
 
 ## Teoría
