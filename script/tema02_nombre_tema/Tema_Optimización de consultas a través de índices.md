@@ -25,6 +25,7 @@ ubicaciones físicas de los datos. Actúa como un índice de un libro en el cual
 
 - ## 1. Elección de tabla e inserción de Datos Masivos.
 La tabla que vamos a estar utilizando en esta ocasión es la tabla Cliente de la base GK_Innovatech, la tabla luce de la siguiente forma:
+```sql
 CREATE TABLE Cliente
 (
   Id_Cliente INT NOT NULL,
@@ -39,11 +40,12 @@ CREATE TABLE Cliente
   Constraint UQ_Cliente_Documento UNIQUE (Documento_Cliente),
   Constraint UQ_Cliente_Correo UNIQUE (Correo)
 );
-
+```
 Para la carga masiva de 1 millon de datos haremos uso del siguiente script:
+```sql
 DECLARE @i INT = 0;
 DECLARE @MaxClientes INT = 1000000;
-
+	
 WHILE @i < @MaxClientes
 BEGIN
 
@@ -78,7 +80,7 @@ BEGIN
     
     SET @i = @i + 1;
 END;
-
+```
 ---
 
 - ## 2. Prueba de consultas Table Scan (Scan Completo) vs Indice Agrupado
@@ -87,22 +89,25 @@ Primero procedemos a realizar una serie de consultas variadas para medir los tie
 
 (PLAN: TABLE SCAN)
 *Prueba 1 (consulta solo por fecha)*
+```
 SELECT * FROM Cliente
 WHERE Fecha_Registro BETWEEN '2016-01-01' AND '2021-01-01'		--//Columnas devueltas: 455.339 //Tiempos (3 intentos): 2640ms/2.495s, 2822ms/2.763s, 2570ms/2.483s
-
+```
 *Prueba 2 (consulta por fecha y documento)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000'		        --//Columnas devueltas: 509.760 //Tiempos (3 intentos): 2854ms/2.761s, 2913ms/2.771s, 2893ms/2.765s
-
+```
 *Prueba 3 (consulta por fecha, documento y telefono)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000' AND
 	Telefono BETWEEN '61000000' AND '690000000'			            --//Columnas devueltas: 381.526 //Tiempos (3 intentos): 2140ms/1.963s, 2428ms/2.218s, 2240ms/2.198s
- 
+ ```
 ---
 
 Ahora creamos un índice acumulado que afecte a la columna 'Fecha_Registro'
@@ -114,22 +119,25 @@ Ahora creamos un índice acumulado que afecte a la columna 'Fecha_Registro'
  Una vez creado el índice acumulado, volvemos a realizar las mismas consultas.
  (PLAN: CLUSTERED INDEX IDX_FechaRegistro)
 *Prueba 1 (consulta solo por fecha)*
+```
 SELECT * FROM Cliente
 WHERE Fecha_Registro BETWEEN '2016-01-01' AND '2021-01-01'		--//Columnas devueltas: 455.339 //Tiempos (3 intentos): 2491ms/2.250s, 2502ms/2.474s, 2477ms/2.235s
-
+```
 *Prueba 2 (consulta por fecha y documento)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000'		        --//Columnas devueltas: 509.760 //Tiempos (3 intentos): 2801ms/2.751s, 2795ms/2.975s, 2897ms/2.759s
-
+```
 *Prueba 3 (consulta por fecha, documento y telefono)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000' AND
 	Telefono BETWEEN '61000000' AND '690000000'			            --//Columnas devueltas: 381.526 //Tiempos (3 intentos): 2119ms/1.935s, 2321ms/2.221s, 2086ms/1.938s
- 
+ ```
 ---
 
 Y Por último vamos a crear otro índice agrupado que incluya más columnas seleccionadas (no sin antes eliminar el anterior índice agrupado, 
@@ -146,22 +154,25 @@ ON Cliente (Fecha_Registro, Documento_Cliente, Telefono)
 Una vez eliminado el anterior índice y creado el indice agrupado incluyendo varias columnas, realizamos las mismas consultas. 
 (PLAN: CLUSTERED INDEX IXD_FechaRegistro_Documento_Telefono)
 *Prueba 1 (consulta solo por fecha)*
+```
 SELECT * FROM Cliente
 WHERE Fecha_Registro BETWEEN '2016-01-01' AND '2021-01-01'		--//Columnas devueltas: 455.339 //Tiempos (3 intentos): 2505ms/2.479s, 2638ms/2.499s, 2599ms/2.506s
-
+```
 *Prueba 2 (consulta por fecha y documento)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000'		        --//Columnas devueltas: 509.760 //Tiempos (3 intentos): 2719ms/2.485s, 2800ms/2.761s, 2830ms/2.751s
-
+```
 *Prueba 3 (consulta por fecha, documento y telefono)*
+```
 SELECT * FROM Cliente
 WHERE
 	Fecha_Registro BETWEEN '2016-01-01' AND '2023-01-01' AND
 	Documento_Cliente BETWEEN '1000000' AND '1800000' AND
 	Telefono BETWEEN '61000000' AND '690000000'			            --//Columnas devueltas: 381.526 //Tiempos (3 intentos): 2069ms/1.960s, 2152ms/1.953s, 2069ms/1.956s
-
+```
 ---
 
 ## 3. Conclusiones.
