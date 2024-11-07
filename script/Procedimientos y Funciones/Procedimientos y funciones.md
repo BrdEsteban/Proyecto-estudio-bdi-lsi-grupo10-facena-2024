@@ -60,7 +60,7 @@ EXEC altaUsuario @Dni = 22333444, @Nombre = 'Noname', @Apellido = 'nolastname', 
 
 ##Funciones 
 
-Las funciones son fragmentos de código que realizan un tarea y devuelven un valo o tabla. Al igual que los Procedimientos, pueden recibir párametros de entrada y, a diferencia es estos, no permiten realizar operaciones de datos con INSERT, UPDATE o DELETE, límitandose a operaciones de lectura.
+Las funciones son fragmentos de código que realizan un tarea y devuelven un valor o tabla. Al igual que los Procedimientos, pueden recibir párametros de entrada y, a diferencia es estos, no permiten realizar operaciones de datos con INSERT, UPDATE o DELETE, límitandose a operaciones de lectura.
 
 Las funciones se crean con el comando 'CREATE FUNCTION'
 Devuelven valores únicos o tablas y son más utilizadas para cálculos, conversiones o formato de datos
