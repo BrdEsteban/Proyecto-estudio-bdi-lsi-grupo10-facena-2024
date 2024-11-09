@@ -3,7 +3,7 @@
 -- PROYECTO: Gestion de Ventas de Productos Electronicos - GRUPO 10 - COMISION 2
 -- INTEGRANTES:
 --          Garay, Kevin Emiliano
---          Borda, Esteban Sebastian
+--          Borda, Esteban Ruben
 --          Acosta, Gonzalo Nahuel
 --          Mancedo, Joaquin
 ---------------------------
