@@ -16,60 +16,54 @@ GO
 -- Description:	Modifica los datos de un usuario
 -- =============================================
 CREATE PROCEDURE modUsuario
-	@id				 INT          = NULL,
-    @modDni          INT          = NULL,
-	@modCorreo		 VARCHAR(100) = NULL,
-	@modNombre		 VARCHAR(100) = NULL,
-	@modApellido     VARCHAR(100) = NULL,
-	@modClave        VARCHAR(80)  = NULL
+    @id            INT          = NULL,
+    @modDni        INT          = NULL,
+    @modCorreo     VARCHAR(100) = NULL,
+    @modNombre     VARCHAR(100) = NULL,
+    @modApellido   VARCHAR(100) = NULL,
+    @modClave      VARCHAR(80)  = NULL
 AS
 BEGIN
-	--Validación de datos
-	--Verifica que se haya ingresado una ID
+    -- Validación de datos
     IF @id IS NULL
-		BEGIN
-			PRINT 'No se ingresó una id';
-		END
-	--Verifica que la ID exista
-	IF @id NOT IN (SELECT Id_Usuario FROM Usuario WHERE @id = Id_Usuario)
-		BEGIN
-			PRINT 'No se ingresó una id válida'
-		END
-	--Toma el valor anterior en caso de que alguno de los parámetros no haya sido modificado
-	IF @modDni = NULL
-		BEGIN
-			SET @modDni = (SELECT Documento_Usuario FROM Usuario WHERE @id = Id_Usuario);
-		END
-	IF @modCorreo = NULL
-		BEGIN
-			SET @modCorreo = (SELECT Correo FROM Usuario WHERE @id = Id_Usuario);
-		END
-	IF @modNombre = NULL
-		BEGIN
-			SET @modNombre    = (SELECT Nombre FROM Usuario WHERE @id = Id_Usuario)
-		END
-	IF @modApellido = NULL
-		BEGIN
-			SET @modApellido    = (SELECT Apellido FROM Usuario WHERE @id = Id_Usuario)
-		END
-	IF @modClave = NULL
-		BEGIN
-			SET @modClave    = (SELECT Clave FROM Usuario WHERE @id = Id_Usuario)
-		END
-	--Try Catch por si ocurre algún error
-    BEGIN TRY
-		
-			UPDATE Usuario
-				SET Documento_Usuario = @modDni,
-					Nombre = @modNombre,
-					Apellido = @modApellido,
-					Correo = @modCorreo,
-					Clave = @modClave
-			WHERE Id_Usuario = @id
+    BEGIN
+        PRINT 'No se ingresó una ID';
+        RETURN;
+    END
+    
+    -- Verifica que la ID exista
+    IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Id_Usuario = @id)
+    BEGIN
+        PRINT 'No se ingresó una ID válida';
+        RETURN;
+    END
 
+    -- Try-Catch por si ocurre algún error
+    BEGIN TRY
+        -- Si los valores fueron ingresados, realiza el UPDATE
+        IF @modDni IS NOT NULL
+        BEGIN
+            UPDATE Usuario SET Documento_Usuario = @modDni WHERE Id_Usuario = @id;
+        END
+        IF @modCorreo IS NOT NULL
+        BEGIN
+            UPDATE Usuario SET Correo = @modCorreo WHERE Id_Usuario = @id;
+        END
+        IF @modNombre IS NOT NULL
+        BEGIN
+            UPDATE Usuario SET Nombre = @modNombre WHERE Id_Usuario = @id;
+        END
+        IF @modApellido IS NOT NULL
+        BEGIN
+            UPDATE Usuario SET Apellido = @modApellido WHERE Id_Usuario = @id;
+        END
+        IF @modClave IS NOT NULL
+        BEGIN
+            UPDATE Usuario SET Clave = @modClave WHERE Id_Usuario = @id;
+        END
     END TRY
     BEGIN CATCH
-        PRINT 'Error al modificar usuario ';
+        PRINT 'Error al modificar usuario';
     END CATCH;
 END;
 
@@ -99,46 +93,52 @@ BEGIN
 			PRINT 'No se ingresó una id';
 		END
 	--Verifica que la ID exista
-	IF @id NOT IN (SELECT Id_Producto FROM Productos WHERE @id = Id_Producto)
+	IF NOT EXISTS (SELECT Id_Producto FROM Productos WHERE @id = Id_Producto)
 		BEGIN
 			PRINT 'No se ingresó una id válida'
 		END
-	--Toma el valor anterior en caso de que alguno de los parámetros no haya sido modificado
-	IF @modCod = NULL
+	--Try Catch por si ocurre algún error
+	BEGIN TRY
+	-- Realiza los UPDATE si hay cambios que realizar
+	IF @modCod IS NOT NULL
 		BEGIN
-			SET @modCod = (SELECT Codigo_Producto FROM Productos WHERE @id = Id_Producto);
+			UPDATE Productos
+				SET Codigo_Producto = @modCod
+			WHERE Id_Producto = @id
 		END
-	IF @modNombre = NULL
+	IF @modNombre IS NOT NULL
 		BEGIN
-			SET @modNombre    = (SELECT Nombre_Producto FROM Productos WHERE @id = Id_Producto)
+			UPDATE Productos
+				SET Nombre_Producto = @modNombre
+			WHERE Id_Producto = @id
 		END
-	IF @modDescripcion = NULL
+	IF @modDescripcion IS NOT NULL
 		BEGIN
-			SET @modDescripcion = (SELECT Descripcion_Producto FROM Productos WHERE @id = Id_Producto)
+			UPDATE Productos
+				SET Descripcion_Producto = @modDescripcion
+			WHERE Id_Producto = @id
 		END
-	IF @modStock = NULL
+	IF @modStock IS NOT NULL
 		BEGIN
-			SET @modStock    = (SELECT Stock FROM Productos WHERE @id = Id_Producto)
+			UPDATE Productos
+				SET Stock = @modStock
+			WHERE Id_Producto = @id
 		END
-	IF @modPrecioC = NULL
+	IF @modPrecioC IS NOT NULL
 		BEGIN
-			SET @modPrecioC = (SELECT Precio_Compra FROM Productos WHERE @id = Id_Producto)
+			UPDATE Productos
+				SET Precio_Compra = @modPrecioC
+			WHERE Id_Producto = @id
 		END
 	IF @modPrecioV = NULL
 		BEGIN
-			SET @modPrecioV = (SELECT Precio_Venta FROM Productos WHERE @id = Id_Producto)
-		END
-	--Try Catch por si ocurre algún error
-    BEGIN TRY
-		
 			UPDATE Productos
-				SET Codigo_Producto = @modCod,
-					Nombre_Producto = @modNombre,
-					Descripcion_Producto = @modDescripcion,
-					Stock = @modStock,
-					Precio_Compra = @modPrecioC,
-					Precio_Venta = @modPrecioV
+				SET Precio_Venta = @modPrecioV
 			WHERE Id_Producto = @id
+		END
+	
+		
+
 
     END TRY
     BEGIN CATCH
