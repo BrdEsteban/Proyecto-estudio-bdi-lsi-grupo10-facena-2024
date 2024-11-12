@@ -122,9 +122,9 @@ Por último, al principio, la extensión del proyecto fue inabarcable, por una m
 Material de lectura/consulta que se utilizó para el desarrollo del trabajo.
  
 1. https://learn.microsoft.com/en-us/sql/t-sql/functions/getdate-transact-sql?view=sql-server-ver16 
-2. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/create-a-stored-procedure?vie w=sql-server-ver16 
-3. https://learn.microsoft.com/es-es/sql/relational-databases/security/permissions-database-engine?view=sql-s erver-ver16
-4. https://learn.microsoft.com/es-es/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver 16 
+2. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16 
+3. https://learn.microsoft.com/es-es/sql/relational-databases/security/permissions-database-engine?view=sql-server-ver16
+4. https://learn.microsoft.com/es-es/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver16 
 5. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/stored-procedures-database-e ngine?view=sql-server-ver16 
 
 
