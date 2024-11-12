@@ -125,6 +125,6 @@ Material de lectura/consulta que se utilizó para el desarrollo del trabajo.
 2. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/create-a-stored-procedure?view=sql-server-ver16 
 3. https://learn.microsoft.com/es-es/sql/relational-databases/security/permissions-database-engine?view=sql-server-ver16
 4. https://learn.microsoft.com/es-es/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver16 
-5. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/stored-procedures-database-e ngine?view=sql-server-ver16 
+5. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/stored-procedures-database-engine?view=sql-server-ver16 
 
 
