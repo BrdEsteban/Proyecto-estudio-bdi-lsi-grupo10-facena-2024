@@ -101,43 +101,76 @@ GRANT EXECUTE ON [modProducto] TO Mancedo;
 GRANT EXECUTE ON ganancias_N_Meses TO Mancedo;
 GRANT EXECUTE ON porcentajeDeVenta TO Mancedo;
 GRANT EXECUTE ON ganancias_de_venta TO Mancedo;
-
--- Permisos de eliminación específicos y restricciones
-GRANT DELETE ON Cliente TO Mancedo;
-GRANT DELETE ON Proveedor TO Mancedo;
 DENY UPDATE TO Mancedo;
 DENY INSERT TO Mancedo;
 DENY DELETE TO Mancedo;
 GO  
 
--- **Pruebas de usuario y permisos asignados**
--- Prueba de permisos para Garay (AdminUser): permite crear y eliminar tablas
-CREATE TABLE TestAdmin (ID INT);
-DROP TABLE TestAdmin;
+--Pruebas con los usuarios y sus roles
 
--- Prueba de inserción y consulta con el usuario Borda
-INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
-VALUES ('1596','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1);
-SELECT * FROM Productos;
 
--- Prueba de solo lectura con el usuario Acosta
-SELECT * FROM Productos;
+-----------------------------------------------
+--Pruebas con el usuario Mancedo
+-----------------------------------------------
 
--- Prueba de permisos de escritura denegados con el usuario Acosta
-INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
-VALUES ('1234','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1);  -- Se espera que falle
+Execute AS User = 'Mancedo'
 
--- Pruebas con el usuario Mancedo
-SELECT * FROM Venta;  -- Prueba de consulta
+Update Productos set Precio_Compra = 0 --Debe fallar en la actualizacion
+
+EXEC altaUsuario @Dni = 44162351, @Nombre = 'Fernando', @Apellido = 'Garcia', @Correo = 'fernando@correo.com', @Clave = 'clave#999', @Estado = 1, @Rol = 3; --Permite ejecutar el procedimiento y agrega el usuario
+
 INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
 VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);  -- Prueba de inserción (debería fallar)
-DELETE FROM Proveedor WHERE ID_Proveedor = 1;  -- Prueba de eliminación
-EXEC [altaUsuario] @Dni = 25406089, @Nombre = 'Pepe', @Apellido = 'Martinez', @Correo = 'p2d@correo.com', @Clave = 'password456', @Estado = 1, @Rol = 3;  -- Ejecución de procedimiento almacenado
-UPDATE Productos SET Precio_Venta = 30.50 WHERE Nombre_Producto = 'Producto de prueba';  -- Prueba de actualización (debería fallar)
 
--- **Verificación del comportamiento de permisos para los usuarios**
--- 1. Usuario con rol de solo lectura (Acosta) debe poder consultar la tabla Productos
-SELECT * FROM Productos;
+Select * from Venta -- Debe permitirlo
+Select * from Cliente -- No permite
+REVERT;
 
--- 2. Usuario sin permisos de lectura debe obtener acceso denegado
-SELECT * FROM Productos;
+-----------------------------------------------
+--Pruebas con el usuario Acosta
+-----------------------------------------------
+
+
+Execute AS User = 'Acosta'
+Update Productos set Precio_Compra = 0 --Debe fallar en la actualizacion
+
+EXEC altaUsuario @Dni = 44162351, @Nombre = 'Fernando', @Apellido = 'Garcia', @Correo = 'fernando@correo.com', @Clave = 'clave#999', @Estado = 1, @Rol = 3; -- Debe fallar
+
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);  -- Prueba de inserción (debería fallar)
+
+Select * from Venta -- Debe permitirlo
+Select * from Cliente -- Debe permitirlo
+REVERT;
+
+-----------------------------------------------
+--Pruebas con el usuario Borda
+-----------------------------------------------
+
+
+Execute AS User = 'Borda'
+Update Productos set Precio_Compra = 0 --Deberia actualizar
+
+EXEC altaUsuario @Dni = 44162351, @Nombre = 'Fernando', @Apellido = 'Garcia', @Correo = 'fernando@correo.com', @Clave = 'clave#999', @Estado = 1, @Rol = 3; -- Debe agregarlo
+
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);  -- Prueba de inserción debe agregarlo
+
+Select * from Venta -- Debe permitirlo
+Select * from Cliente -- Debe permitirlo
+REVERT;
+-----------------------------------------------
+--Pruebas con el usuario Garay
+-----------------------------------------------
+
+Execute AS User = 'Garay'
+Update Productos set Precio_Compra = 0 --Deberia actualizar
+
+EXEC altaUsuario @Dni = 44162351, @Nombre = 'Fernando', @Apellido = 'Garcia', @Correo = 'fernando@correo.com', @Clave = 'clave#999', @Estado = 1, @Rol = 3; -- Debe agregarlo
+
+INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
+VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);  -- Prueba de inserción debe agregarlo
+
+Select * from Venta -- Debe permitirlo
+Select * from Cliente -- Debe permitirlo
+REVERT;
