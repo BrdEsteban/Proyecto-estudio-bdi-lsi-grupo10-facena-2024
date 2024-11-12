@@ -55,24 +55,20 @@ Entendemos que la implementación de una base de datos que realice tanto el cont
 
 ## CAPITULO II: MARCO CONCEPTUAL O REFERENCIAL
 
-**TEMA 1 " ---- "** 
+Las innovaciones tecnológicas han cambiado completamente la manera en que las empresas gestionan sus ventas, especialmente en el ámbito de los productos electrónicos. En este contexto, el uso de una base de datos para la gestión de ventas tiene un impacto directo sobre cómo se maneja la gran cantidad de información, como los patrones de compra de los clientes, el control del inventario y el seguimiento de las ventas diarias.
+Esto permite que las decisiones se tomen de manera más rápida y precisa, lo que mejora la eficiencia de la empresa.
 
-
-
-**TEMA 2 " ----- "** 
-
-
-...
+Temas:
+1. **Manejo de Permisos y Roles**
+2. **Procedimientos y Funciones**
+3. **Optimizacion por Indices**
+4. **Manejo de JSON**
 
 ## CAPÍTULO III: METODOLOGÍA SEGUIDA 
 
+Usaremos como metodología “Programación Extrema”, proponemos reuniones a través de discord, donde pactamos las tareas que hacían falta para el proyecto. Luego ese listado de tareas serían subidas  a la plataforma “TRELLO”, donde cada colaborador podrá asignarse tareas, las cuales se dividirán en "En proceso", "Finalizados, por subir",  "Finalizados, subidos". Para que cada colaborador pueda hacer y ver los cambios de los otros en el proyecto, optamos por utilizar la plataforma de “Git” como sistema de control de versiones distribuido y “GitHub” como plataforma para alojar el repositorio Git.
 
-
- **a) Cómo se realizó el Trabajo Práctico**
-
-
- **b) Herramientas (Instrumentos y procedimientos)**
-
+https://trello.com/b/NCpbVGAy/base-de-datos
 
 
 ## CAPÍTULO IV: DESARROLLO DEL TEMA / PRESENTACIÓN DE RESULTADOS 
@@ -91,8 +87,12 @@ Entendemos que la implementación de una base de datos que realice tanto el cont
 
 Acceso al documento [PDF](doc/diccionario_datos.pdf) del diccionario de datos.
 
+### Modelo Fisico
 
-### Desarrollo TEMA 1 "----"
+
+
+
+### Desarrollo Manejo de Permisos y Roles
 
 
 ### Desarrollo TEMA 2 "----"
@@ -102,14 +102,29 @@ Acceso al documento [PDF](doc/diccionario_datos.pdf) del diccionario de datos.
 
 ## CAPÍTULO V: CONCLUSIONES
 
+A lo largo del desarrollo del trabajo se tuvo que investigar sobre la entidad para implementar una base de datos, aclarar objetivos, restricciones, sortear complicaciones en cuanto a aspectos técnicos, además de emplear varios diagramas y herramientas para bosquejar el sistema lo más óptimo posible. 
+
+Se generaron diferentes usuarios con sus respectivas contraseñas y rango para llevar a cabo la utilización y el control de la base de datos. Se implementaron procedimientos almacenados, transacciones para tener un mejor nivel de integridad y seguridad.
+También se agregó una tabla con un campo Json que permite tener otra forma de acceder a los datos y se planteó una aproximación a una optimización para su uso logrando ver algunos beneficios como ser la ampliación de información por cada producto.
+Se utilizaron muchas herramientas de comunicación para trabajar en equipo e ir coordinando y solucionando los problemas que surgían a medida que avanzaba el proyecto, ya que fueron varias etapas las que se llevaron a cabo. Como ser la planificación, donde se recopiló información sobre distintas herramientas, el funcionamiento de las terminales ya existentes, etc. Se estableció el diseño del diagrama entidad-relación para de este modo realizar el desarrollo y las distintas pruebas de control del mismo. 
+
+Como conclusión podemos decir que se alcanzaron los objetivos planteados realizando una buena estructuración y modelado de la base de datos, se utilizaron diferentes técnicas aplicando buenas prácticas de programación y normalización de tablas, esto también da la posibilidad para que en un futuro se pueda implementar nuevas mejoras.
+
+Dificultades: 
+Nuestra mayor dificultad fue a la hora de usar las distintas herramientas tanto para el modelado como para el desarrollo de los distintos script, además de aprender el manejo del repositorio, sus funciones y sentencias. 
+Otras dificultades fueron entender y estudiar sobre el negocio, dado que la documentación es extensa, por lo que recabar información se hizo tedioso, y más aún, la selectividad de la misma. 
+Por último, al principio, la extensión del proyecto fue inabarcable, por una mala delimitación de alcance o funciones, lo cual llevó a reestructurar el proyecto, la documentación y las buenas prácticas de programación. Fueron errores lógicos dada la poca información o teoría que se manejaba en ese momento.
 
 
 
 ## BIBLIOGRAFÍA DE CONSULTA
 
- 1. List item
- 2. List item
- 3. List item
- 4. List item
- 5. List item
+Material de lectura/consulta que se utilizó para el desarrollo del trabajo.
+ 
+1. https://learn.microsoft.com/en-us/sql/t-sql/functions/getdate-transact-sql?view=sql-server-ver16 
+2. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/create-a-stored-procedure?vie w=sql-server-ver16 
+3. https://learn.microsoft.com/es-es/sql/relational-databases/security/permissions-database-engine?view=sql-s erver-ver16
+4. https://learn.microsoft.com/es-es/sql/t-sql/language-elements/transactions-transact-sql?view=sql-server-ver 16 
+5. https://learn.microsoft.com/es-es/sql/relational-databases/stored-procedures/stored-procedures-database-e ngine?view=sql-server-ver16 
+
 
