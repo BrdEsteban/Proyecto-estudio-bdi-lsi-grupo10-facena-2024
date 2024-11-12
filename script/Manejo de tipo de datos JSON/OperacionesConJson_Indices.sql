@@ -81,7 +81,6 @@ SET Info_producto = JSON_MODIFY(Info_producto, '$.Estado',
         ELSE JSON_VALUE(Info_producto, '$.Estado')
     END
 )
-WHERE Id_Producto = 2;
 
 -- Eliminar un atributo dentro de la columna JSON estableciendo el valor del atributo en NULL
 UPDATE Productos_json
