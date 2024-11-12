@@ -1,148 +1,143 @@
 ---------------------------
 -- BASE DE DATOS I.
--- PROYECTO: Gestion de Ventas de Productos Electronicos - GRUPO 10 - COMISION 2
+-- PROYECTO: Gestión de Ventas de Productos Electrónicos - GRUPO 10 - COMISIÓN 2
 -- INTEGRANTES:
 --          Garay, Kevin Emiliano
---          Borda, Esteban Ruben
+--          Borda, Esteban Sebastian
 --          Acosta, Gonzalo Nahuel
 --          Mancedo, Joaquin
 ---------------------------
 
--- Creación del inicio de sesión para AdminUser
+-- **Creación del inicio de sesión y usuario AdminUser con rol de administrador**
 CREATE LOGIN [AdminUser] 
-WITH PASSWORD = 'Password111',  -- Establece la contraseña para el inicio de sesión
-CHECK_EXPIRATION = OFF,  -- Desactiva la expiración de contraseña
-CHECK_POLICY = OFF;      -- Desactiva la política de complejidad de contraseña
+WITH PASSWORD = 'Password111',  -- Contraseña para el inicio de sesión AdminUser
+CHECK_EXPIRATION = OFF,         -- Desactiva expiración de contraseña
+CHECK_POLICY = OFF,             -- Desactiva política de complejidad de contraseña
+DEFAULT_DATABASE = GK_Innovatech;  -- Base de datos predeterminada
 
--- Creación del usuario en la base de datos 
-USE [GK_Innovatech];  -- Selecciona la base de datos correcta
-CREATE USER Garay FOR LOGIN [AdminUser];  -- Crea un usuario llamado Garay asociado al inicio de sesión AdminUser
+-- Selecciona la base de datos y crea un usuario asociado a AdminUser
+USE [GK_Innovatech];
+CREATE USER Garay FOR LOGIN [AdminUser];  -- Usuario Garay vinculado a AdminUser
 
--- Asignación del rol de sysadmin al usuario creado
+-- Asignación del rol de administrador (sysadmin) a AdminUser
 EXEC sys.sp_addsrvrolemember 
-    @loginame = N'AdminUser',  -- Nombre del inicio de sesión
-    @rolename = N'sysadmin';    -- Rol asignado (sysadmin) que otorga todos los permisos en el servidor
+    @loginame = N'AdminUser', 
+    @rolename = N'sysadmin';
 
 ----------------------------------------
--- Creación de inicio de sesión ABM y Rol de Lectura/Escritura
+-- **Creación de inicio de sesión y usuario ABM con permisos de lectura/escritura**
 CREATE LOGIN [ABM] 
-WITH PASSWORD = 'Password222',  -- Establece la contraseña para el inicio de sesión ABM
+WITH PASSWORD = 'Password222',  
 CHECK_EXPIRATION = OFF, 
 CHECK_POLICY = OFF,
-DEFAULT_DATABASE = GK_Innovatech;  -- Define la base de datos predeterminada
+DEFAULT_DATABASE = GK_Innovatech;
 
-USE GK_Innovatech;  -- Selecciona la base de datos correcta
-CREATE USER Borda FOR LOGIN ABM;  -- Crea un usuario llamado Borda asociado al inicio de sesión ABM
+USE GK_Innovatech;  
+CREATE USER Borda FOR LOGIN ABM;  -- Usuario Borda vinculado a ABM
 
--- Asignación de permisos de lectura y escritura al usuario Borda
-EXEC sp_addrolemember 'db_datareader', 'Borda';  -- Asigna el rol db_datareader (permiso de lectura)
-EXEC sp_addrolemember 'db_datawriter', 'Borda';  -- Asigna el rol db_datawriter (permiso de escritura)
+-- Asigna permisos de lectura y escritura a Borda
+EXEC sp_addrolemember 'db_datareader', 'Borda';  
+EXEC sp_addrolemember 'db_datawriter', 'Borda';
+
+-- Permite a Borda ejecutar procedimientos almacenados de alta, baja y modificación
+GRANT EXECUTE ON [altaCategoria] TO Borda;
+GRANT EXECUTE ON [altaUsuario] TO Borda;
+GRANT EXECUTE ON [altaProducto] TO Borda;
+
+GRANT EXECUTE ON [eliminarCategoria] TO Borda;
+GRANT EXECUTE ON [eliminarProducto] TO Borda;
+GRANT EXECUTE ON [eliminarUsuario] TO Borda;
+
+GRANT EXECUTE ON [modUsuario] TO Borda;
+GRANT EXECUTE ON [modProducto] TO Borda;
 
 ----------------------------------------
--- Creación de inicio de sesión consulta y rol público
+-- **Creación de inicio de sesión y usuario Consulta con rol de solo lectura**
 CREATE LOGIN [Consulta] 
-WITH PASSWORD = 'Password333',  -- Establece la contraseña para el inicio de sesión Consulta
+WITH PASSWORD = 'Password333',  
 CHECK_EXPIRATION = OFF, 
 CHECK_POLICY = OFF,
-DEFAULT_DATABASE = GK_Innovatech;  -- Define la base de datos predeterminada
+DEFAULT_DATABASE = GK_Innovatech;
 
-USE GK_Innovatech;  -- Selecciona la base de datos correcta
-CREATE USER Acosta FOR LOGIN Consulta;  -- Crea un usuario llamado Acosta asociado al inicio de sesión Consulta
+USE GK_Innovatech;  
+CREATE USER Acosta FOR LOGIN Consulta;
 
--- Asignación de permisos de solo lectura al usuario Acosta en varias tablas
-GRANT SELECT ON Venta TO Acosta;        -- Permite al usuario Acosta realizar SELECT en la tabla Venta
-GRANT SELECT ON Productos TO Acosta;    -- Permite al usuario Acosta realizar SELECT en la tabla Productos
-GRANT SELECT ON Categorias TO Acosta;    -- Permite al usuario Acosta realizar SELECT en la tabla Categorias
-
--- Crea un rol de solo lectura
+-- Crear rol de solo lectura y asignar permisos de consulta
 CREATE ROLE ReadOnlyRole;
 GRANT SELECT ON Productos TO ReadOnlyRole;
 GRANT SELECT ON Venta TO ReadOnlyRole;
-GRANT SELECT ON Productos TO ReadOnlyRole;
 GRANT SELECT ON Detalle_Venta TO ReadOnlyRole;
-
+GRANT SELECT ON Compra TO ReadOnlyRole;
+GRANT SELECT ON Detalle_Compra TO ReadOnlyRole;
+GRANT SELECT ON Cliente TO ReadOnlyRole;
+GRANT SELECT ON Proveedor TO ReadOnlyRole;
+GRANT SELECT ON Categorias TO ReadOnlyRole;
+GRANT EXECUTE ON ganancias_N_Meses TO ReadOnlyRole;
+GRANT EXECUTE ON porcentajeDeVenta TO ReadOnlyRole;
+GRANT EXECUTE ON ganancias_de_venta TO ReadOnlyRole;
 EXEC sp_addrolemember 'ReadOnlyRole', 'Acosta';
 
-
 ----------------------------------------
--- Creación de usuario de la base de datos, usuario público
-USE GK_Innovatech;  -- Selecciona la base de datos correcta
+-- **Creación de inicio de sesión y usuario G10 con permisos específicos**
+CREATE LOGIN G10  
+WITH PASSWORD = 'Password444',  
+CHECK_EXPIRATION = OFF, 
+CHECK_POLICY = OFF,
+DEFAULT_DATABASE = GK_Innovatech;
 
-CREATE LOGIN G10  -- Se crea un ingreso para un usuario G10
-WITH PASSWORD = 'Password444';  -- Establece la contraseña para el inicio de sesión G10
-  
-CREATE USER Mancedo FOR LOGIN G10;  -- Se registra el usuario llamado Mancedo asociado al inicio de sesión G10
+CREATE USER Mancedo FOR LOGIN G10;
 
--- Asignación de permisos específicos al usuario Mancedo
-GRANT SELECT ON Venta TO Mancedo;  -- Permite al usuario Mancedo realizar SELECT en la tabla Venta
-GRANT SELECT ON Productos TO Mancedo;  -- Permite al usuario Mancedo realizar SELECT en la tabla Productos
-GRANT INSERT ON Productos TO Mancedo;  -- Permite al usuario Mancedo realizar INSERT en la tabla Productos
-GRANT INSERT ON Categorias TO Mancedo;  -- Permite al usuario Mancedo realizar INSERT en la tabla Categorias
-GRANT INSERT ON Proveedor TO Mancedo;  -- Permite al usuario Mancedo realizar INSERT en la tabla Proveedor
-GRANT EXECUTE ON [altaUsuario] TO Mancedo;  -- Permite al usuario Mancedo ejecutar el procedimiento almacenado altaUsuario
-GRANT DELETE ON Cliente TO Mancedo;  -- Permite al usuario Mancedo realizar DELETE en la tabla Cliente
-GRANT DELETE ON Proveedor TO Mancedo;  -- Permite al usuario Mancedo realizar DELETE en la tabla Proveedor
-DENY UPDATE TO Mancedo;  -- Niega el permiso de UPDATE al usuario Mancedo, evitando modificaciones en las tablas
+-- Asigna permisos específicos al usuario Mancedo
+GRANT SELECT ON Venta TO Mancedo;
+GRANT SELECT ON Productos TO Mancedo;
+GRANT EXECUTE ON [altaUsuario] TO Mancedo;
+GRANT EXECUTE ON [altaProducto] TO Mancedo;
+GRANT EXECUTE ON [altaCategoria] TO Mancedo;
 
-GO  -- Finaliza el lote de comandos SQL
+GRANT EXECUTE ON [bajaProducto] TO Mancedo;
+GRANT EXECUTE ON [bajaCategoria] TO Mancedo;
 
+GRANT EXECUTE ON [modProducto] TO Mancedo;
+GRANT EXECUTE ON ganancias_N_Meses TO Mancedo;
+GRANT EXECUTE ON porcentajeDeVenta TO Mancedo;
+GRANT EXECUTE ON ganancias_de_venta TO Mancedo;
 
---Pruebas usuario Garay
+-- Permisos de eliminación específicos y restricciones
+GRANT DELETE ON Cliente TO Mancedo;
+GRANT DELETE ON Proveedor TO Mancedo;
+DENY UPDATE TO Mancedo;
+DENY INSERT TO Mancedo;
+DENY DELETE TO Mancedo;
+GO  
+
+-- **Pruebas de usuario y permisos asignados**
+-- Prueba de permisos para Garay (AdminUser): permite crear y eliminar tablas
 CREATE TABLE TestAdmin (ID INT);
 DROP TABLE TestAdmin;
---Deberia permitir agregar y eliminar tablas
 
---Inserciones usuario Borda
+-- Prueba de inserción y consulta con el usuario Borda
 INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
 VALUES ('1596','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1);
-SELECT * FROM Productos;--Deberia permitir
+SELECT * FROM Productos;
 
---Permisos de lectura con usuario Acosta
-SELECT * FROM Productos; -- Debe permitir la consulta
+-- Prueba de solo lectura con el usuario Acosta
+SELECT * FROM Productos;
 
---Con usuario que no tenga el rol
-SELECT * FROM Productos; -- Debe denegar el acceso
-
---Prueba de insercion Acosta
+-- Prueba de permisos de escritura denegados con el usuario Acosta
 INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
-VALUES ('1234','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1); --Debe de fallar
+VALUES ('1234','Producto de prueba','Descripcion Prueba', 0, 25.50, 15.50, 1, 1, 1);  -- Se espera que falle
 
-
---Pruebas con el usuario Mancedo
-
--- Ejemplo de SELECT
-SELECT * FROM Venta;
-
--- Ejemplo de INSERT
+-- Pruebas con el usuario Mancedo
+SELECT * FROM Venta;  -- Prueba de consulta
 INSERT INTO Productos (Codigo_Producto, Nombre_Producto, Descripcion_Producto, Stock, Precio_Venta, Precio_Compra, Estado, Id_Categoría, Id_Proveedor) 
-VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);
+VALUES ('4598','Monitor HD','19" pulgadas', 0, 25.50, 15.50, 1, 1, 1);  -- Prueba de inserción (debería fallar)
+DELETE FROM Proveedor WHERE ID_Proveedor = 1;  -- Prueba de eliminación
+EXEC [altaUsuario] @Dni = 25406089, @Nombre = 'Pepe', @Apellido = 'Martinez', @Correo = 'p2d@correo.com', @Clave = 'password456', @Estado = 1, @Rol = 3;  -- Ejecución de procedimiento almacenado
+UPDATE Productos SET Precio_Venta = 30.50 WHERE Nombre_Producto = 'Producto de prueba';  -- Prueba de actualización (debería fallar)
 
--- Ejemplo de DELETE
-DELETE FROM Proveedor WHERE ID_Proveedor = 1;
+-- **Verificación del comportamiento de permisos para los usuarios**
+-- 1. Usuario con rol de solo lectura (Acosta) debe poder consultar la tabla Productos
+SELECT * FROM Productos;
 
--- Ejemplo de ejecución de procedimiento almacenado
-   EXEC [altaUsuario]       @Dni = 25406089,
-    @Nombre  = 'Pepe',
-    @Apellido  = 'Martinez',
-    @Correo  = 'p2d@correo.com',
-    @Clave  = 'password456',
-    @Estado = 1,
-    @Rol = 3;
-
--- Ejemplo de UPDATE (debería fallar)
-UPDATE Productos SET Precio_Venta = 30.50 WHERE Nombre_Producto = 'Producto de prueba';
-
-
-	
---**Verificar el comportamiento de ambos usuarios**:
-   -- Con el usuario con rol de solo lectura (`User1`), intenta leer el contenido de la tabla:
-
-     SELECT * FROM Productos;
-
-    -- Resultado esperado: acceso permitido.
-   
-   -- Con el usuario sin permisos de lectura (`User2`), intenta hacer lo mismo:
-
-     SELECT * FROM Productos;
- 
-    -- Resultado esperado: acceso denegado.
+-- 2. Usuario sin permisos de lectura debe obtener acceso denegado
+SELECT * FROM Productos;
