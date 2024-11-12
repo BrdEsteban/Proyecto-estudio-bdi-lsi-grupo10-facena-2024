@@ -10,7 +10,7 @@ GO
 
 CREATE TABLE Cliente
 (
-  Id_Cliente INT NOT NULL,
+  Id_Cliente INT IDENTITY NOT NULL,
   Documento_Cliente INT NOT NULL,
   Nombre VARCHAR(100) NOT NULL,
   Apellido VARCHAR(100) NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE Cliente
 
 CREATE TABLE Proveedor
 (
-  Id_Proveedor INT NOT NULL,
+  Id_Proveedor INT IDENTITY NOT NULL,
   Documento_Proveedor INT NOT NULL,
   Razon_Social VARCHAR(100) NOT NULL,
   Correo VARCHAR(100) NOT NULL,
@@ -39,7 +39,7 @@ CREATE TABLE Proveedor
 
 CREATE TABLE Rol
 (
-  Id_Rol INT NOT NULL,
+  Id_Rol INT IDENTITY NOT NULL,
   Descripcion VARCHAR(80) NOT NULL,
   Fecha_Registro DATE NOT NULL,
   Constraint PK_Rol_IdRol PRIMARY KEY (Id_Rol)
@@ -47,7 +47,7 @@ CREATE TABLE Rol
 
 CREATE TABLE Usuario
 (
-  Id_Usuario INT NOT NULL,
+  Id_Usuario INT IDENTITY NOT NULL,
   Documento_Usuario INT NOT NULL,
   Nombre VARCHAR(100) NOT NULL,
   Apellido VARCHAR(100) NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE Usuario
 
 CREATE TABLE Categorias
 (
-  Id_Categoría INT NOT NULL,
+  Id_Categoría INT IDENTITY NOT NULL,
   Descripcion_Categoria VARCHAR(100) NOT NULL,
   Estado INT NOT NULL,
   Fecha_Registro DATE NOT NULL,
@@ -73,14 +73,14 @@ CREATE TABLE Categorias
 
 CREATE TABLE Tipo_Documento
 (
-  Id_TipoDocumento INT NOT NULL,
+  Id_TipoDocumento INT IDENTITY NOT NULL,
   Descripcion VARCHAR(100) NOT NULL,
   Constraint PK_TipoDocumento_IdTipoDocumento PRIMARY KEY (Id_TipoDocumento)
 );
 
 CREATE TABLE Permiso
 (
-  Id_Permiso INT NOT NULL,
+  Id_Permiso INT IDENTITY NOT NULL,
   Nombre_Menu VARCHAR(50) NOT NULL,
   Fecha_Registro DATE NOT NULL,
   Id_Rol INT NOT NULL,
@@ -90,7 +90,7 @@ CREATE TABLE Permiso
 
 CREATE TABLE Productos
 (
-  Id_Producto INT NOT NULL,
+  Id_Producto INT IDENTITY NOT NULL,
   Codigo_Producto VARCHAR(80) NOT NULL,
   Nombre_Producto VARCHAR(100) NOT NULL,
   Descripcion_Producto VARCHAR(100) NOT NULL,
@@ -109,7 +109,7 @@ CREATE TABLE Productos
 
 CREATE TABLE Compra
 (
-  Id_Compra INT NOT NULL,
+  Id_Compra INT IDENTITY NOT NULL,
   Numero_Documento INT NOT NULL,
   Monto_Total FLOAT NOT NULL,
   Fecha_Registro DATE NOT NULL,
@@ -123,7 +123,7 @@ CREATE TABLE Compra
 
 CREATE TABLE Venta
 (
-  Id_Venta INT NOT NULL,
+  Id_Venta INT IDENTITY NOT NULL,
   Numero_Documento INT NOT NULL,
   Monto_Pago FLOAT NOT NULL,
   Monto_Total FLOAT NOT NULL,
@@ -140,7 +140,7 @@ CREATE TABLE Venta
 
 CREATE TABLE Detalle_Compra
 (
-  Id_DetalleCompra INT NOT NULL,
+  Id_DetalleCompra INT IDENTITY NOT NULL,
   Cantidad INT NOT NULL,
   SubTotal FLOAT NOT NULL,
   Fecha_Registro DATE NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE Detalle_Compra
 
 CREATE TABLE Detalle_Venta
 (
-  Id_DetalleVenta INT NOT NULL,
+  Id_DetalleVenta INT IDENTITY NOT NULL,
   Cantidad INT NOT NULL,
   SubTotal FLOAT NOT NULL,
   Fecha_Registro DATE NOT NULL,
