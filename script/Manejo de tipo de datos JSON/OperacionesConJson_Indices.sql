@@ -1,54 +1,55 @@
 /*
-Tema: Manejo de tipos de datos JSON.
+Tema: Manejo de tipos de datos JSON en SQL Server.
 
-Objetivos de Aprendizaje:
+**Objetivos de Aprendizaje:**
+1. Conocer el manejo de tipos de datos JSON en bases de datos relacionales.
+2. Implementar operaciones CRUD sobre datos almacenados en formato JSON.
 
-Conocer el manejo de tipos de datos JSON en bases de datos relacionales.
-Implementar operaciones CRUD sobre datos almacenados en formato JSON.
-Criterios de EvaluaciÛn:
+**Tareas:**
+1. Crear una nueva tabla con una columna JSON.
+2. Agregar datos no estructurados en formato JSON y realizar operaciones de actualizaci√≥n, agregaci√≥n y borrado.
+3. Ejecutar operaciones de consulta sobre datos JSON.
+4. Optimizar consultas para estas estructuras JSON.
 
-ImplementaciÛn correcta de operaciones con datos JSON
-EvaluaciÛn de la eficiencia en consultas y manipulaciones de datos JSON.
-DocumentaciÛn clara y conclusiones derivadas de las pruebas.
-Tareas: 
-
-1)Crear una nueva tabla  con una columna JSON
-2)Agregar un conjunto de datos no estructurados en formato JSON, y realizar operaciones de actualizaciÛn, agregaciÛn y borrado de datos.
-3)Realizar operaciones de consultas.
-4)Aproximaciones a la optimizaciÛn de consultas para estas estructuras
-Expresar sus conclusiones.
 */
-/*
-Primero nos aproximamos a funciones basicas que se pueden usar en SQL SERVER para extraer datos de tablas en formato JSON.
-Funcion: FOR JSON. Sirve para extraer datos de una tabla en formato json.
+
+/* 
+Ejemplo de funciones b√°sicas para extraer datos de tablas en formato JSON. 
+Funci√≥n: FOR JSON - convierte los datos en JSON.
 */
-SELECT TOP 1 Id_Producto FROM Productos
-FOR JSON PATH, WITHOUT_ARRAY_WRAPPER --WITHOUTH_ARRAY_WRAPPER Sirve para eliminar los corchetes
 
-SELECT TOP 3 * FROM Cliente
-FOR JSON AUTO
--- Agregando la funcion FOR JSON podemos almacenar todos los datos obtenidos dentro de una unica columna en formato Json
+-- Ejemplo de FOR JSON con PATH y WITHOUT_ARRAY_WRAPPER para eliminar corchetes:
+SELECT TOP 1 Id_Producto, Nombre_Producto, Descripcion_Producto 
+FROM Productos
+FOR JSON PATH, WITHOUT_ARRAY_WRAPPER; --WITHOUT_ARRAY_WRAPPER quita los corchetes
 
---1)Crear una nueva tabla  con una columna JSON
+-- Ejemplo de FOR JSON AUTO:
+SELECT * FROM Cliente
+FOR JSON AUTO;
+
+SELECT * FROM Productos
+FOR JSON AUTO;
+
+/* 
+1. Crear una nueva tabla con una columna JSON 
+*/
 
 CREATE TABLE Productos_json (
     Id_Producto INT NOT NULL,
-    Info_producto NVARCHAR(MAX) NULL, -- Columna para almacenar datos en formato JSON
+    Info_producto NVARCHAR(MAX) NULL, -- Columna para almacenar datos JSON
     Fecha_Registro DATE NOT NULL,
-    CONSTRAINT PK_Productos_Info PRIMARY KEY (Id_Producto))
+    CONSTRAINT PK_Productos_Info PRIMARY KEY (Id_Producto)
+);
 
---Agregamos un CHECK que verifique que solo se ingresen datos con formato JSON en el campo Info_producto
+-- Agregamos un CHECK para verificar que solo se ingresen datos en formato JSON en Info_producto
 ALTER TABLE Productos_json
-ADD CONSTRAINT CK_Productos_json CHECK (ISJSON(Info_producto) > 0) -- Se utiliza la funcion ISJSON.
+ADD CONSTRAINT CK_Productos_json_isjson CHECK (ISJSON(Info_producto) > 0);
 
-/*
-Select * from Productos
-Select * from Productos_json
-DELETE FROM Productos_json
+/* 
+2. Insertar datos en formato JSON y realizar operaciones de actualizaci√≥n, agregaci√≥n y borrado 
 */
 
-/*2)Agregar un conjunto de datos no estructurados en formato JSON, y realizar operaciones de actualizaciÛn, agregaciÛn y borrado de datos.
-*/
+-- Insertar datos de la tabla Productos en formato JSON en la nueva tabla Productos_json
 INSERT INTO Productos_json (Id_Producto, Info_producto, Fecha_Registro)
 SELECT 
     Id_Producto,
@@ -57,44 +58,40 @@ SELECT
                '"Nombre_producto": "', Nombre_Producto, '", ',
                '"Descripcion_producto": "', Descripcion_Producto, '", ',
                '"Stock": ', Stock, ', ',
-               '"Precio_Compra": "', CAST(Precio_Compra AS NVARCHAR(255)), '", ',-- Es necesario convertir el tipo de dato FLOAT a NVARCHAR
-               '"Precio_Venta": "', CAST(Precio_Venta AS NVARCHAR(255)), '", ',-- Es necesario convertir el tipo de dato FLOAT a NVARCHAR
+               '"Precio_Compra": "', CAST(Precio_Compra AS NVARCHAR(255)), '", ',
+               '"Precio_Venta": "', CAST(Precio_Venta AS NVARCHAR(255)), '", ',
                '"Estado": ', Estado, ', ',
-               '"Categoria": ', Id_CategorÌa, ', ',
+               '"Categoria": ', Id_Categor√≠a, ', ',
                '"Proveedor": ', Id_Proveedor, '}')
     ) AS Info_producto,
     Fecha_Registro
 FROM 
     Productos;
 
-/*
-Ahora bien. Como modifico una propiedad especifica dentro de la columna json?
-La funcion JSON_MODIFY nos permite modificar los atributos dentro de la columna json
+/* 
+Actualizaci√≥n de un campo espec√≠fico en la columna JSON usando JSON_MODIFY
 */
---Podemos observar que el atributo "estado" de la columna json solo devuelve el valor 1 o 2. Esto podria ser mas descriptivo.
 
+-- Modificar el campo "Estado" para hacerlo m√°s descriptivo
 UPDATE Productos_json
-SET Info_producto = JSON_MODIFY(Info_producto,'$.Estado',
+SET Info_producto = JSON_MODIFY(Info_producto, '$.Estado',
     CASE
         WHEN JSON_VALUE(Info_producto, '$.Estado') = '1' THEN 'publicado'
-        WHEN JSON_VALUE(Info_producto, '$.Estado') = '2' THEN 'Dado de baja'
-        ELSE JSON_VALUE(Info_producto, '$.Estado') -- Mantiene el valor si no es 1 o 2
+        WHEN JSON_VALUE(Info_producto, '$.Estado') = 'Dado de baja'
+        ELSE JSON_VALUE(Info_producto, '$.Estado')
     END
 )
---Para realizar la actualizacion del estado en todos los productos quitariamos el where.
 WHERE Id_Producto = 2;
 
---Tambien podemos eliminar un atributo dentro de un json con JSON_MODIFY igualando el atributo a NULL
+-- Eliminar un atributo dentro de la columna JSON estableciendo el valor del atributo en NULL
 UPDATE Productos_json
-SET Info_producto = JSON_MODIFY(Info_producto,'$.Estado',NULL)
-Where Id_Producto = 2-- En caso de no poner el where se borraria el atributo 'Estado' de todos los productos dentro de la columna json.
+SET Info_producto = JSON_MODIFY(Info_producto, '$.Estado', NULL)
+WHERE Id_Producto = 2;
 
-Select * from Productos_json
-Where Id_Producto = 2
-
-/*De manera que la columna sea un poco mas descriptiva se propone un script para modificar la columna json
-En lugar de mostrar el id_Categoria para el atributo "Categoria" se va a mostrar la descripcion de la categoria.
+/* 
+Actualizar el campo "Categoria" con el nombre descriptivo y "Proveedor" con la raz√≥n social
 */
+
 UPDATE Productos_json
 SET Info_producto = JSON_MODIFY(
     JSON_MODIFY(
@@ -107,73 +104,83 @@ SET Info_producto = JSON_MODIFY(
 )
 FROM Productos_json pj
 JOIN Productos p ON pj.Id_Producto = p.Id_Producto
-JOIN Categorias c ON p.Id_CategorÌa = c.Id_CategorÌa
+JOIN Categorias c ON p.Id_Categor√≠a = c.Id_Categor√≠a
 JOIN Proveedor pr ON p.Id_Proveedor = pr.Id_Proveedor;
 
-Select	
-JSON_VALUE(Info_producto, '$.Categoria') AS Categoria,
-JSON_VALUE(Info_producto, '$.Proveedor') AS Proveedor
-From Productos_json
-
-/*
-3)Realizar operaciones de consultas.*/
-/*
-A traves de la funcion JSON_VALUE Podemos extraer a modo registro los campos guardados en la columna JSON.
-En caso de que se quiera extrar un campo con un arreglo se utiliza JSON_QUERY
-*/
-Select	JSON_VALUE(Info_producto, '$.Estado') AS nombre from Productos_json
-WHERE Id_Producto = 2
-
-/*
-Tambien puedo extrar varios campos en un solo select y normalizarlos en formato tabla
-*/
-Select	
-JSON_VALUE(Info_producto, '$.Nombre_producto') AS Nombre, 
-JSON_VALUE(Info_producto, '$.Precio_Venta') AS Precio,
-JSON_VALUE(Info_producto, '$.Estado') AS Estado
-From Productos_json
-
-
-Select	
-JSON_VALUE(Info_producto, '$.Nombre_producto') AS Nombre
-From Productos_json
-Where JSON_VALUE(Info_producto, '$.Categoria')= 'Accesorios' AND JSON_VALUE(Info_producto, '$.Stock')< '60'
-
-/*4)Aproximaciones a la optimizaciÛn de consultas para estas estructuras
-
-Al almacenar datos JSON en SQL Server, normalmente querr· filtrar u ordenar resultados de consultas por una o varias propiedades de los documentos JSON.
-Los Ìndices funcionan de la misma manera en los datos JSON en varchar/nvarchar o en el tipo de datos json nativo.
-Se pueden indexar las propiedades o "atributos" dentro del JSON mediante columnas calculadas
+/* 
+3. Consultas en datos JSON 
 */
 
---Para optimizar la siguiente consulta:
---Trae el nombre de los productos de la categoria accesorios con un stock menor a 200.
+-- Consultar un campo espec√≠fico dentro del JSON utilizando JSON_VALUE
+SELECT JSON_VALUE(Info_producto, '$.Estado') AS Estado
+FROM Productos_json
+WHERE Id_Producto = 2;
+
+-- Extraer varios campos de la columna JSON
+SELECT	
+    JSON_VALUE(Info_producto, '$.Nombre_producto') AS Nombre, 
+    JSON_VALUE(Info_producto, '$.Precio_Venta') AS Precio,
+    JSON_VALUE(Info_producto, '$.Estado') AS Estado
+FROM Productos_json;
+
+/* 
+Consultar productos con un stock menor a un valor espec√≠fico
+*/
+
+SELECT	
+    JSON_VALUE(Info_producto, '$.Nombre_producto') AS Nombre,
+    JSON_VALUE(Info_producto, '$.Descripcion_producto') AS Descripcion
+FROM Productos_json
+WHERE JSON_VALUE(Info_producto, '$.Stock') < '60';
+
+/*Observamos en el plan de ejecucion que se realiza un index scan*/
+
+/* 
+4. Optimizaci√≥n de consultas en estructuras JSON 
+*/
+
+-- Ejemplo de consulta que optimizaremos mediante √≠ndices:
 SELECT	
     JSON_VALUE(Info_producto, '$.Nombre_producto') AS Nombre
 FROM 
     Productos_json
 WHERE 
     JSON_VALUE(Info_producto, '$.Categoria') = 'Accesorios' 
-    AND TRY_CAST(JSON_VALUE(Info_producto, '$.Stock') AS INT) < 200;
+    AND TRY_CAST(JSON_VALUE(Info_producto, '$.Stock') AS INT) >= 50;
 
-/* Creamos columnas calculadas Nombre_producto, Categoria y Stock en la tabla Productos_json
-Esto permitir· que la consulta acceda a los valores de Categoria y Stock directamente desde el Ìndice, 
-en lugar de extraer los datos de Info_producto en cada consulta.*/
+/* 
+Creaci√≥n de columnas calculadas para optimizar consultas mediante √≠ndices en columnas JSON
+*/
 
 ALTER TABLE Productos_json
 ADD 
     Nombre_producto AS JSON_VALUE(Info_producto, '$.Nombre_producto'),
-    Categoria AS JSON_VALUE(Info_producto, '$.Categoria'),
-    Stock AS TRY_CAST(JSON_VALUE(Info_producto, '$.Stock') AS INT); -- Convertimos a INT para poder usar mejor los comparadores <,>
+    Categoria AS LEFT(JSON_VALUE(Info_producto, '$.Categoria'), 100) PERSISTED, --Limitamos caracteres para el √≠ndice para poder crear un indice sin problemas
+    Stock AS TRY_CAST(JSON_VALUE(Info_producto, '$.Stock') AS INT);
 
---Select * from Productos_json
+/*Probamos la consulta pero utilizando las columnas calculadas*/
 
--- Creamos los indices
-CREATE INDEX IDX_ProductosJson_Categoria ON Productos_json(Categoria);
-CREATE INDEX IDX_ProductosJson_Stock ON Productos_json(Stock);
-
---Ejecuto nuevamente la consulta para observar el rendimiento
 SELECT Nombre_producto AS Nombre
 FROM Productos_json
-WHERE Categoria = 'Accesorios' AND Stock < 200;
+WHERE Categoria like 'Accesorios' AND Stock > 50;
 
+select * from Productos_json
+--Notamos que el motor sigue haciendo un scan
+
+/* 
+Creaci√≥n de √≠ndice para mejorar la consulta por Categoria incluyendo a las columnas Nombre_producto, Stock
+*/
+
+CREATE INDEX IDX_ProductosJson_Categoria_Nombre_Stock ON Productos_json(Categoria) INCLUDE (Nombre_producto, Stock);
+
+--drop index IDX_ProductosJson_Categoria_Nombre_Stock on Productos_json
+
+/* Consulta optimizada */
+--Utilizamos las columnas calculadas para realizar la consulta
+
+SELECT Nombre_producto AS Nombre
+FROM Productos_json
+WHERE Categoria = 'Accesorios' AND Stock > 50;
+
+Select * from Productos_json
+/*Observamos que se utiliza un Idex seek que resulta mas eficiente que un index scan.*/
