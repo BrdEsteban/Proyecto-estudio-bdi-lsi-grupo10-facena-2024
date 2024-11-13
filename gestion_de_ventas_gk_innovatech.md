@@ -307,7 +307,7 @@ Aceptan parámetros de entrada y pueden retornar valores o incluso tablas.
 
 Permiten la manipulación de datos mediante sentencias INSERT, UPDATE o DELETE; además del manejo de excepciones usando ‘BEGIN TRY’ y ‘BEGIN CATCH’
 
-![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Excepciones_Proc.png) 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/ExcepcionesProc.png) 
 
 Los procedimientos se ejecutan usando el comando ‘EXEC’ seguido del nombre del procedimiento y sus parámetros.  
 
