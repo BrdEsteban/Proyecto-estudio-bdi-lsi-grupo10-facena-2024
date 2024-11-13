@@ -111,7 +111,7 @@ JOIN Proveedor pr ON p.Id_Proveedor = pr.Id_Proveedor;
 */
 
 -- Consultar un campo específico dentro del JSON utilizando JSON_VALUE
-SELECT JSON_VALUE(Info_producto, '$.Estado') AS Estado
+SELECT JSON_VALUE(Info_producto, '$.Estado') AS Estado /*El signo de dólar ($) representa el elemento de contexto.*/
 FROM Productos_json
 WHERE Id_Producto = 2;
 
