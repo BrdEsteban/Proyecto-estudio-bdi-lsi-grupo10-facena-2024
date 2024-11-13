@@ -76,8 +76,8 @@ Actualización de un campo específico en la columna JSON usando JSON_MODIFY
 UPDATE Productos_json
 SET Info_producto = JSON_MODIFY(Info_producto, '$.Estado',
     CASE
-        WHEN JSON_VALUE(Info_producto, '$.Estado') = '1' THEN 'publicado'
-        WHEN JSON_VALUE(Info_producto, '$.Estado') = 'Dado de baja'
+        WHEN JSON_VALUE(Info_producto, '$.Estado') = '1' THEN 'Publicado'
+        WHEN JSON_VALUE(Info_producto, '$.Estado') = '2' THEN 'Dado de baja'
         ELSE JSON_VALUE(Info_producto, '$.Estado')
     END
 )
