@@ -290,7 +290,13 @@ En SQL Server, todos los elementos protegibles tienen permisos asociados que se 
 - Con un usuario sin permisos de lectura, el acceso a la misma consulta debería estar denegado, validando la configuración de seguridad implementada.
 
 
-### Desarrollo TEMA 2 "----"
+### Desarrollo Procedimientos y Funciones
+
+
+### Desarrollo Optimizacion por Indices
+
+
+### Desarrollo Manejo de Tipo de Datos JSON
 
 
 
