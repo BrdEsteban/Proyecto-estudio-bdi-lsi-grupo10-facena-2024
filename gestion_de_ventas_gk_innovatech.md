@@ -70,6 +70,8 @@ Usaremos como metodología “Programación Extrema”, proponemos reuniones a t
 
 https://trello.com/b/NCpbVGAy/base-de-datos
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/image.png) 
+
 
 ## CAPÍTULO IV: DESARROLLO DEL TEMA / PRESENTACIÓN DE RESULTADOS 
 
