@@ -258,7 +258,7 @@ CREATE TABLE Detalle_Venta
 );
 ~~~
 
-### Desarrollo Manejo de Permisos y Roles
+## Desarrollo Manejo de Permisos y Roles
 
 En SQL Server, todos los elementos protegibles tienen permisos asociados que se pueden asignar a entidades de seguridad. La gestión de permisos en el Motor de base de datos se lleva a cabo tanto a nivel de servidor, mediante la asignación a inicios de sesión y roles de servidor, como a nivel de base de datos, mediante la asignación a usuarios y roles específicos de la base de datos. Esta estructura permite un control granular sobre las acciones que pueden realizarse en los diferentes objetos y recursos del sistema.
 
@@ -290,8 +290,8 @@ En SQL Server, todos los elementos protegibles tienen permisos asociados que se 
 - Con un usuario sin permisos de lectura, el acceso a la misma consulta debería estar denegado, validando la configuración de seguridad implementada.
 
 
-### Desarrollo Procedimientos y Funciones
-##Procedimientos Almacenados
+## Desarrollo Procedimientos y Funciones
+### Procedimientos Almacenados
 
 Un procedimiento almacenado es un conjunto de instrucciones SQL que se almacenan en el servidor y se pueden ejecutar de forma repetida. Permiten la reutilización de código en operaciones complejas que se realizan frecuentemente. Pueden, además, mejorar el rendimiento y la seguridad del sistema.
 
@@ -304,7 +304,7 @@ Este procedimiento permite la inserción de registros en la tabla Usuario de nue
 
 
 Ejemplo:
-
+~~~
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  // 
 
 CREATE PROCEDURE altaUsuario 
@@ -342,16 +342,19 @@ BEGIN
 END;
 
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
-
+~~~
 Ejemplo de Uso:
+
+~~~
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
 
 EXEC altaUsuario @Dni = 22333444, @Nombre = 'Noname', @Apellido = 'nolastname', @Correo = 'noname@mail.com', @Clave = 'clave'
 -- Los últimos dos parámetros no son necesarios ya que los valores por defecto son válidos
 
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
+~~~
 
-
-##Funciones 
+### Funciones 
 
 Las funciones son fragmentos de código que realizan un tarea y devuelven un valo o tabla. Al igual que los Procedimientos, pueden recibir párametros de entrada y, a diferencia es estos, no permiten realizar operaciones de datos con INSERT, UPDATE o DELETE, límitandose a operaciones de lectura.
 
@@ -366,7 +369,7 @@ Funciones con valor de tabla: Devuelven una tabla y se utilizan en operaciones d
 El siguiente ejemplo es una función con valor de tabla. Esta devuelve la id de los productos y su porcentaje de ventas en una cantadidad de meses pasada por parámetros 
 
 Ejemplo:
-
+~~~
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  // 
 
 CREATE FUNCTION porcentajeDeVenta ( @Meses INT = 1)
@@ -392,21 +395,24 @@ RETURN
 GO
 
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
+~~~
 Ejemplo de uso:
+~~~
+// ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
 
 SELECT P.*, PV.Porcentajes AS 'Porcentaje de venta últimos 2 meses' FROM Productos P
 	JOIN dbo.porcentajeDeVenta(2) AS PV ON PV.Id_Producto = P.Id_Producto
 
-
 // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // ----- // -----  //
-
-##Diferencias:
+~~~
+### Diferencias:
 - Uso: Los procedimientos almacenados están orientados a ejecutar operaciones complejas de manipulación de datos, mientras que las funciones se enfocan en realizar cálculos o transformaciones que devuelven un valor o conjunto de valores.
 - Capacidades de modificación: Los procedimientos almacenados permiten modificar datos en las tablas, a diferencia de las funciones.
 - Invocación: Los procedimientos almacenados se ejecutan con `EXEC`, mientras que las funciones se llaman dentro de una consulta.
 
 
-### Desarrollo Optimizacion por Indices
+
+## Desarrollo Optimizacion por Indices
 
 Los índices son fundamentales para mejorar el rendimiento de consultas en bases de datos grandes. En un sistema de ventas, los índices pueden optimizar consultas frecuentes, como la búsqueda de productos, el registro de ventas, o la consulta de inventarios, haciendo que el sistema responda de manera más ágil.
 
@@ -577,7 +583,67 @@ WHERE
 
 
 
-### Desarrollo Manejo de Tipo de Datos JSON
+## Desarrollo Manejo de Tipo de Datos JSON
+
+El manejo de JSON (JavaScript Object Notation) es relevante cuando se trabaja con integraciones de sistemas externos, ya que permite el intercambio de datos de manera eficiente y estructurada. JSON es útil para almacenar configuraciones de productos o integrar datos de ventas desde otras plataformas. Otro beneficio es que los datos de tipo JSON es su longitud que puede ser variable. Dentro de un Json se puede agregar tags nuevos e insertar nuevos datos sin afectar a los demás campos sin la necesidad de crear nuevas columnas.
+
+En SQL Server, en lugar de un tipo de datos JSON explícito, se usa el tipo de datos NVARCHAR (normalmente NVARCHAR(MAX)) para almacenar los datos JSON. Luego, se utilizan funciones JSON nativas para manipular y consultar datos.
+
+Una funcion basica pero a la vez muy util es la funcion FOR JSON
+
+Nos devuelve los 3 primeros clientes de la tabla cliente pero en un único registro de tipo json.
+
+Si utilizamos un editor de texto para ver mejor, se visualiza de la siguiente manera:
+
+
+
+Para ver el funcionamiento de este tipo de dato Json seguimos los siguientes pasos.
+1. Crear una tabla que permita almacenar datos JSON. Se crea además una constraint con la función definida ISJSON que verifica que el formato del nvarchar que se ingrese sea del formato Json.
+
+SQL Server proporciona funciones como JSON_VALUE, JSON_QUERY y OPENJSON para leer y manipular datos JSON.
+- JSON_VALUE: Extrae un valor específico de un documento JSON.
+- JSON_QUERY: Extrae un objeto o arreglo completo de un documento JSON.
+- OPENJSON: Convierte un texto JSON en un conjunto de filas.
+
+2. Insertamos en nuestra nueva tabla los datos extraídos de la tabla productos a través de la función json_query que nos permite manipular el arreglo en formato json para insertar en la columna info_producto de tipo json (nvarchar(max)).
+
+3. Ahora para utilizar la funcion JSON_MODIFY cambiamos una propiedad del json para que su lectura sea más descriptiva.
+
+- JSON MODIFY MODIFY te permite actualizar, agregar o “eliminar” valores específicos dentro de un documento JSON sin sobreescribir todo el contenido.
+
+
+Observamos el resultado:
+~~~
+{
+  "Codigo_producto": "PROD001",
+  "Nombre_producto": "Laptop",
+  "Descripcion_producto": "Laptop 14 pulgadas",
+  "Stock": 50,
+  "Precio_Compra": "500",
+  "Precio_Venta": "650",
+  "Estado": "publicado",
+  "Categoria": "Electrónica",
+  "Proveedor": "Proveedor A"
+}
+~~~
+4. Usando la función JSON_VALUE extraemos un valor específico que posee un atributo dentro del json, Observamos que nos devuelve los datos a nivel registro como si se tratara de una tabla.
+
+* Una aproximación a una optimización del consumo de este tipo de datos se realiza a través de índices. Se pueden crear columnas calculadas que extraen valores del json y agregar índices. De esta forma las consultas hacia ese tipo de datos serían más eficientes.
+ 
+Creamos las columnas calculadas:
+
+
+Veamos la optimización obtenida de una consulta simple:
+Notamos que el motor realiza un ‘index scan’ por la pk de productos.
+
+
+Luego agregamos el índice a las nuevas columnas para observar alguna optimización:
+
+Vemos el plan de ejecución nuevamente:
+Ahora notamos que el motor realiza un index seek que efectivamente es más eficiente que un scan.
+
+
+
 
 
 
