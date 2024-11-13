@@ -262,7 +262,7 @@ CREATE TABLE Detalle_Venta
 
 En SQL Server, todos los elementos protegibles tienen permisos asociados que se pueden asignar a entidades de seguridad. La gestión de permisos en el Motor de base de datos se lleva a cabo tanto a nivel de servidor, mediante la asignación a inicios de sesión y roles de servidor, como a nivel de base de datos, mediante la asignación a usuarios y roles específicos de la base de datos. Esta estructura permite un control granular sobre las acciones que pueden realizarse en los diferentes objetos y recursos del sistema.
 
-
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Manejo%20de%20Permisos.png) 
 
 1. Creación de inicios de sesión y usuarios en la base de datos
 
@@ -295,9 +295,22 @@ En SQL Server, todos los elementos protegibles tienen permisos asociados que se 
 
 Un procedimiento almacenado es un conjunto de instrucciones SQL que se almacenan en el servidor y se pueden ejecutar de forma repetida. Permiten la reutilización de código en operaciones complejas que se realizan frecuentemente. Pueden, además, mejorar el rendimiento y la seguridad del sistema.
 
-Los procedimientos se crean con la sentencia 'CREATE PROCEDURE'
+Los procedimientos se crean con la sentencia 'CREATE PROCEDURE' de la siguiente forma:
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/ClausulaProc.png) 
+
 Aceptan parámetros de entrada y pueden retornar valores o incluso tablas.
-Permiten la manipulación de datos mediante sentencias INSERT, UPDATE o DELETE; además del manejo de excepciones
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/ParametrosProc.png) 
+
+Permiten la manipulación de datos mediante sentencias INSERT, UPDATE o DELETE; además del manejo de excepciones usando ‘BEGIN TRY’ y ‘BEGIN CATCH’
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Excepciones_Proc.png) 
+
+Los procedimientos se ejecutan usando el comando ‘EXEC’ seguido del nombre del procedimiento y sus parámetros.  
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/ProcedimientoConsulta.png) 
+
 
 En el siguiente ejemplo se observan algunas de estas caráterísticas.
 Este procedimiento permite la inserción de registros en la tabla Usuario de nuestra base de datos.
@@ -359,12 +372,15 @@ EXEC altaUsuario @Dni = 22333444, @Nombre = 'Noname', @Apellido = 'nolastname', 
 Las funciones son fragmentos de código que realizan un tarea y devuelven un valo o tabla. Al igual que los Procedimientos, pueden recibir párametros de entrada y, a diferencia es estos, no permiten realizar operaciones de datos con INSERT, UPDATE o DELETE, límitandose a operaciones de lectura.
 
 Las funciones se crean con el comando 'CREATE FUNCTION'
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Funciones5.png) 
+
 Devuelven valores únicos o tablas y son más utilizadas para cálculos, conversiones o formato de datos
 
 
-Tipos de funciones:
-Funciones escalares: Devuelven un valor único, como un número o texto.
-Funciones con valor de tabla: Devuelven una tabla y se utilizan en operaciones de consulta más complejas.
+### Tipos de funciones:
+- Funciones escalares: Devuelven un valor único, como un número o texto.
+- Funciones con valor de tabla: Devuelven una tabla y se utilizan en operaciones de consulta más complejas.
 
 El siguiente ejemplo es una función con valor de tabla. Esta devuelve la id de los productos y su porcentaje de ventas en una cantadidad de meses pasada por parámetros 
 
@@ -428,6 +444,8 @@ Un índice no agrupado no altera el orden físico de los datos en la tabla. En l
 Ejemplo de uso de índice agrupados.
 La tabla en la que vamos a estar probando los índices acumulados es la tabla Cliente que cuenta con la siguiente estructura:
 
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Optimizacion1.png) 
 
 
 Para que las consultas sean costosas en términos de tiempo y recursos vamos a hacer una inserción de 1 millón de datos con la ayuda de un script
@@ -522,6 +540,9 @@ Estas consultas variadas fueron realizadas con el propósito de medir los tiempo
 Ahora procederemos a crear un índice el cual afecte a la columna de fecha_registro:
 
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Optimizacion4.png) 
+
+
 Una vez creado el índice en la columna fecha procedemos a realizar las mismas pruebas realizadas cuando no teníamos un índice agrupado.
 
 ~~~
@@ -552,8 +573,13 @@ Como pueden ver, a pesar de ser las mismas pruebas hubo cambios notables en los 
 Ahora procedemos a eliminar el índice anterior porque como ya mencionamos no pueden haber más de un índice agrupado en una misma tabla.
 
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Optimizacion5.1.png) 
+
+
 Ahora creamos un nuevo índice agrupado el cual agrupe otras columnas deseadas en este caso usaremos las utilizadas por las pruebas: fecha, documento y teléfono.
 
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/Optimizacion5.2.png) 
 
 
 Y ahora volveremos a realizar las mismas pruebas y verificamos los nuevos tiempos.
@@ -591,14 +617,21 @@ En SQL Server, en lugar de un tipo de datos JSON explícito, se usa el tipo de d
 
 Una funcion basica pero a la vez muy util es la funcion FOR JSON
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON1.png) 
+
 Nos devuelve los 3 primeros clientes de la tabla cliente pero en un único registro de tipo json.
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON2.png) 
 
 Si utilizamos un editor de texto para ver mejor, se visualiza de la siguiente manera:
 
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON3.png) 
 
 Para ver el funcionamiento de este tipo de dato Json seguimos los siguientes pasos.
 1. Crear una tabla que permita almacenar datos JSON. Se crea además una constraint con la función definida ISJSON que verifica que el formato del nvarchar que se ingrese sea del formato Json.
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON4.png) 
 
 SQL Server proporciona funciones como JSON_VALUE, JSON_QUERY y OPENJSON para leer y manipular datos JSON.
 - JSON_VALUE: Extrae un valor específico de un documento JSON.
@@ -607,10 +640,13 @@ SQL Server proporciona funciones como JSON_VALUE, JSON_QUERY y OPENJSON para lee
 
 2. Insertamos en nuestra nueva tabla los datos extraídos de la tabla productos a través de la función json_query que nos permite manipular el arreglo en formato json para insertar en la columna info_producto de tipo json (nvarchar(max)).
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON5.png) 
+
 3. Ahora para utilizar la funcion JSON_MODIFY cambiamos una propiedad del json para que su lectura sea más descriptiva.
 
 - JSON MODIFY MODIFY te permite actualizar, agregar o “eliminar” valores específicos dentro de un documento JSON sin sobreescribir todo el contenido.
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON6.png) 
 
 Observamos el resultado:
 ~~~
@@ -628,21 +664,28 @@ Observamos el resultado:
 ~~~
 4. Usando la función JSON_VALUE extraemos un valor específico que posee un atributo dentro del json, Observamos que nos devuelve los datos a nivel registro como si se tratara de una tabla.
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON7.png) 
+
 * Una aproximación a una optimización del consumo de este tipo de datos se realiza a través de índices. Se pueden crear columnas calculadas que extraen valores del json y agregar índices. De esta forma las consultas hacia ese tipo de datos serían más eficientes.
  
 Creamos las columnas calculadas:
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON8.png) 
 
 Veamos la optimización obtenida de una consulta simple:
 Notamos que el motor realiza un ‘index scan’ por la pk de productos.
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON9.png) 
 
 Luego agregamos el índice a las nuevas columnas para observar alguna optimización:
+
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON10.png) 
 
 Vemos el plan de ejecución nuevamente:
 Ahora notamos que el motor realiza un index seek que efectivamente es más eficiente que un scan.
 
 
+![Imagen Permisos](https://github.com/BrdEsteban/Proyecto-estudio-bdi-lsi-grupo10-facena-2024/blob/master/Img/JSON11.png) 
 
 
 
