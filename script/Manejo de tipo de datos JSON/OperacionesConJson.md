@@ -30,18 +30,33 @@ En SQL Server, en lugar de un tipo de datos JSON explícito, se usa el tipo de d
 4. Ejecutamos nuevamente la consulta para observar su plan de ejecucion y observamos que el motor realiza efectivamente un 'Index Seek'.
 
 ## Conclusiones
-- Realizando las operaciones basicas y entendiendo como se realiza el manejo de datos JSON en SQL Server podemos observar los siguientes topicos.
--Ventajas:
-    -Versatilidad: Permite manejar grandes volúmenes de datos semi-estructurados sin la necesidad de crear múltiples tablas. *Es importante considerar que los datos
-      a almacenar no comprometan la integridad de la base de datos.*
-    -Flexibilidad en Actualizaciones: JSON facilita agregar o modificar propiedades sin alterar el esquema de la tabla. *En columnas json bien estructuradas donde         no se realicen consultas tan complejas.*
-    -Almacenamiento: Al consolidar múltiples atributos dentro de un campo JSON, se reduce la cantidad de columnas en la tabla y la complejidad en el diseño de la         base de datos. El campo json puede crecer y ser editado siempre que se maneje dentro del limite de caracteres designado a la columna. *Pero es importante             tener en cuenta que a mayor tamaño mayor implicancia en el rendimiento de las consultas*
+## Conclusiones
 
- -Desventajas:
-     -Rendimiento: Las consultas en JSON pueden ser más lentas que las consultas en columnas tradicionales. Aun cuando se crean columnas calculadas e índices, el         rendimiento puede no ser óptimo para consultas complejas. *Casi siempre tendremos que implementar indices de manera estrategica para optimizar las consultas.         Sin embargo el uso de multiples indices podria generar problemas en el rendimiento por la naturaleza propia de los indices*.
-     -Mantenimiento: Los datos JSON requieren *validación adicional* y una prueba de rendimiento para sistemas donde los datos semi-formateados sean muy                     extensos. En este punto el rendimiento se veria afectado por el tiempo que lleve solucionar las consultas de manera eficiente por parte del equipo de                desarrolladores. 
-Oobservamos que el uso de json en SQL puede ser muy útil exportar un json con la información requerida para algún otro sistema.
+Realizando las operaciones básicas y entendiendo cómo se maneja el uso de datos JSON en SQL Server, podemos identificar los siguientes puntos:
+
+### Ventajas:
+- **Versatilidad:**  
+  Permite manejar grandes volúmenes de datos semi-estructurados sin la necesidad de crear múltiples tablas.  
+  *Es importante considerar que los datos a almacenar no comprometan la integridad de la base de datos.*
+  
+- **Flexibilidad en Actualizaciones:**  
+  JSON facilita agregar o modificar propiedades sin alterar el esquema de la tabla.  
+  *Esto es ideal en columnas JSON bien estructuradas donde no se realicen consultas tan complejas.*
+
+- **Eficiencia en Almacenamiento:**  
+  Al consolidar múltiples atributos dentro de un campo JSON, se reduce la cantidad de columnas en la tabla y la complejidad del diseño de la base de datos.  
+  *El campo JSON puede crecer y ser editado siempre que se maneje dentro del límite de caracteres designado a la columna. Sin embargo, es importante tener en cuenta que a mayor tamaño, mayor implicancia en el rendimiento de las consultas.*
+
+### Desventajas:
+- **Rendimiento:**  
+  Las consultas en JSON pueden ser más lentas que las consultas en columnas tradicionales.  
+  *Incluso al crear columnas calculadas e índices, el rendimiento puede no ser óptimo para consultas complejas.*  
+  *Casi siempre será necesario implementar índices estratégicamente para optimizar las consultas, pero el uso excesivo de índices podría generar problemas de rendimiento debido a su naturaleza.*
+
+- **Mantenimiento:**  
+  Los datos JSON requieren *validación adicional* y pruebas de rendimiento, especialmente en sistemas donde los datos semi-estructurados son muy extensos.  
+  *El rendimiento puede verse afectado por el tiempo que lleve solucionar consultas complejas de manera eficiente por parte del equipo de desarrollo.*
+  
+Observamos que el uso de json en SQL puede ser muy útil exportar un json con la información requerida para algún otro sistema.
 Sus desventajas estan dadas por el tamaño, la complejidad en el diseño de la base de datos y de los datos almacenados de tipo json.
 Teniendo en cuenta estos puntos entendemos que una buena forma de aprovechar el potencial de estos tipos de datos semi estructurados sería que guarden información que pudiera cambiar con el tiempo pero que no comprometa el diseño estructural de la base de datos. Es decir, información que complemente al sistema y sea necesaria pero que al ser tan cambiante pueda estar en un json aprovechando sus ventajas y no haya que cambiar el modelo de la base SQL. 
-    
-
